@@ -1,3 +1,6 @@
+"""
+These are the unit test for my project 
+"""
 import unittest
 import tkinter as tk
 from AmazonProjectKilpela import *
