@@ -86,10 +86,14 @@ class TrailerGUI:
             (4, 5, 6, 7): "Trailers leaving at 2pm",
             (8, 9, 10, 11): "Trailers leaving at 10am"
         }
+        
+        # priority queue 
+        for trailer in trailers:
+            self.trailers.put(trailer)
 
         try:
             # This sorts trailers based on their percentages full
-            sorted_trailers = self.selection_sort(trailers)
+            sorted_trailers = self.insertion_sort(trailers)
 
             # This iterates over the sorted trailers to create the GUI elements 
             for i, trailer in enumerate(sorted_trailers):
@@ -160,17 +164,15 @@ class TrailerGUI:
             print(f"Error: {e}")
 
     # This is the sort for the program 
-    def selection_sort(self, trailers):
+    def insertion_sort(self, trailers):
         trailers_list = list(trailers)
-        n = len(trailers_list)
-        for i in range(n - 1):
-            min_idx = i
-            for j in range(i + 1, n):
-                percentage_i = trailers_list[i].packages_loaded / trailers_list[i].packages_expected
-                percentage_j = trailers_list[j].packages_loaded / trailers_list[j].packages_expected
-                if percentage_j < percentage_i:
-                    min_idx = j
-            trailers_list[i], trailers_list[min_idx] = trailers_list[min_idx], trailers_list[i]
+        for i in range(1, len(trailers_list)):
+            key = trailers_list[i]
+            j = i - 1
+            while j >= 0 and (trailers_list[j].packages_loaded / trailers_list[j].packages_expected) > (key.packages_loaded / key.packages_expected):
+                trailers_list[j + 1] = trailers_list[j]
+                j -= 1
+            trailers_list[j + 1] = key
         return trailers_list
 
 
